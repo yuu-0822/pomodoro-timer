@@ -11,6 +11,7 @@ body {
   height: 100vh;
 }
 
+/* ===== コンテナ ===== */
 .container {
   background: #ffffff;
   padding: 36px 44px;
@@ -21,7 +22,7 @@ body {
   position: relative;
 }
 
-/* ダーク切替ボタン（PC向け） */
+/* ===== ダーク切替ボタン ===== */
 #themeToggle {
   position: absolute;
   top: 12px;
@@ -32,8 +33,10 @@ body {
   cursor: pointer;
 }
 
+/* ===== 表示 ===== */
 #mode {
   font-size: 26px;
+  font-weight: 600;
   margin-bottom: 16px;
 }
 
@@ -61,35 +64,64 @@ button {
 #pause { background: #ff9800; color: #fff; }
 #reset { background: #f44336; color: #fff; }
 
-/* ===== スマホ ===== */
+/* =========================
+   スマホ最適化
+   ========================= */
 @media (max-width: 480px) {
+  body {
+    align-items: stretch;
+    background: #ffffff;
+  }
+
   .container {
+    width: 100%;
     height: 100svh;
+    max-width: none;
+    padding: 20px 18px 16px;
     border-radius: 0;
-    padding: 16px;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
+  /* 🌙☀️ を右上に大きく */
+  #themeToggle {
+    top: 10px;
+    right: 16px;
+    font-size: 32px;   /* ← 大きく */
+    z-index: 10;
+  }
+
+  #mode {
+    font-size: 30px;
+    margin-top: 40px; /* ← トグルと被らない */
+  }
+
   #time {
     font-size: min(34vw, 150px);
+    font-weight: 800;
+    line-height: 1;
     margin: 0;
   }
 
   .buttons {
     flex-direction: column;
     gap: 16px;
+    margin-bottom: env(safe-area-inset-bottom);
   }
 
   button {
     width: 100%;
     font-size: 24px;
     padding: 20px 0;
+    border-radius: 18px;
   }
 }
 
-/* ===== ダークモード ===== */
+/* =========================
+   ダークモード
+   ========================= */
 body.dark {
   background: #121212;
   color: #eaeaea;
@@ -97,10 +129,6 @@ body.dark {
 
 body.dark .container {
   background: #1c1c1c;
-}
-
-body.dark #time {
-  color: #ffffff;
 }
 
 body.dark #start { background: #2e7d32; }
