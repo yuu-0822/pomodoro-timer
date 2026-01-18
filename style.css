@@ -16,14 +16,14 @@ body {
 .container {
   background: #ffffff;
   padding: 40px 50px;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   text-align: center;
   width: 100%;
   max-width: 420px;
 }
 
-/* ===== モード表示（作業 / 休憩） ===== */
+/* ===== モード表示 ===== */
 #mode {
   font-size: 28px;
   font-weight: 600;
@@ -51,7 +51,7 @@ button {
   font-size: 20px;
   padding: 16px 26px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
@@ -82,18 +82,40 @@ button:active {
   color: #ffffff;
 }
 
-/* ===== スマホ対応 ===== */
+/* ===== スマホ特化（強め拡大） ===== */
 @media (max-width: 480px) {
+  body {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
   .container {
-    padding: 30px 20px;
+    max-width: 100%;
+    padding: 40px 24px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  #mode {
+    font-size: 32px;
+    margin-bottom: 24px;
   }
 
   #time {
-    font-size: 60px;
+    font-size: 88px;
+    margin: 40px 0;
+    letter-spacing: 3px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 18px;
   }
 
   button {
-    font-size: 18px;
-    padding: 14px 20px;
+    font-size: 22px;
+    padding: 20px 0;
+    width: 100%;
+    border-radius: 16px;
   }
 }
