@@ -1,96 +1,92 @@
-// ===== 定数 =====
-const WORK_TIME = 25 * 60 * 1000;   // 25分
-const BREAK_TIME = 5 * 60 * 1000;   // 5分
-
 // ===== 要素取得 =====
-const timeText = document.getElementById('time');
-const modeText = document.getElementById('mode');
-const startBtn = document.getElementById('start');
-const pauseBtn = document.getElementById('pause');
-const resetBtn = document.getElementById('reset');
-const alarm = document.getElementById('alarm');
+const modeEl = document.getElementById("mode");
+const timeEl = document.getElementById("time");
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const resetBtn = document.getElementById("reset");
+const themeToggle = document.getElementById("themeToggle");
 
-// ===== 状態 =====
+// ===== 時間設定 =====
+const WORK_TIME = 25 * 60; // 25分
+let remainingTime = WORK_TIME;
 let timerId = null;
-let startTime = 0;
-let mode = 'work';                 // work / break
-let remainingTime = WORK_TIME;     // 残り時間(ms)
+let isRunning = false;
 
-// ===== ユーティリティ =====
-function format(ms) {
-  const totalSeconds = Math.ceil(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+// ===== 表示更新 =====
+function updateDisplay() {
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  timeEl.textContent = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
 }
 
-function getDuration() {
-  return mode === 'work' ? WORK_TIME : BREAK_TIME;
+// ===== タイマー開始 =====
+function startTimer() {
+  if (isRunning) return;
+
+  isRunning = true;
+  startBtn.textContent = "再開";
+
+  timerId = setInterval(() => {
+    if (remainingTime > 0) {
+      remainingTime--;
+      updateDisplay();
+    } else {
+      clearInterval(timerId);
+      isRunning = false;
+      alert("作業時間終了！");
+    }
+  }, 1000);
 }
 
-// ===== メイン処理 =====
-function update() {
-  const elapsed = Date.now() - startTime;
-  remainingTime = getDuration() - elapsed;
-
-  if (remainingTime <= 0) {
-    alarm.play();
-    switchMode();
-    return;
-  }
-
-  timeText.textContent = format(remainingTime);
-}
-
-function start() {
-  if (timerId !== null) return; // 二重起動防止
-
-  startTime = Date.now() - (getDuration() - remainingTime);
-  timerId = setInterval(update, 500);
-
-  startBtn.textContent = '開始';
-}
-
-function pause() {
-  if (timerId === null) return;
+// ===== 一時停止 =====
+function pauseTimer() {
+  if (!isRunning) return;
 
   clearInterval(timerId);
-  timerId = null;
-
-  startBtn.textContent = '再開';
+  isRunning = false;
+  startBtn.textContent = "再開";
 }
 
-function reset() {
+// ===== リセット =====
+function resetTimer() {
   clearInterval(timerId);
-  timerId = null;
-
-  mode = 'work';
-  modeText.textContent = '作業';
+  isRunning = false;
   remainingTime = WORK_TIME;
-
-  timeText.textContent = '25:00';
-  startBtn.textContent = '開始';
-}
-
-// ===== モード切替 =====
-function switchMode() {
-  clearInterval(timerId);
-  timerId = null;
-
-  mode = mode === 'work' ? 'break' : 'work';
-  modeText.textContent = mode === 'work' ? '作業' : '休憩';
-  remainingTime = getDuration();
-
-  startBtn.textContent = '開始';
-  start();
+  startBtn.textContent = "開始";
+  updateDisplay();
 }
 
 // ===== ボタンイベント =====
-startBtn.onclick = start;
-pauseBtn.onclick = pause;
-resetBtn.onclick = reset;
+startBtn.addEventListener("click", startTimer);
+pauseBtn.addEventListener("click", pauseTimer);
+resetBtn.addEventListener("click", resetTimer);
 
 // ===== 初期表示 =====
-timeText.textContent = '25:00';
-modeText.textContent = '作業';
-startBtn.textContent = '開始';
+updateDisplay();
+
+// =======================
+// ダークモード（PC対応）
+// =======================
+
+// 初期テーマ（保存 or OS）
+if (
+  localStorage.getItem("theme") === "dark" ||
+  (!localStorage.getItem("theme") &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches)
+) {
+  document.body.classList.add("dark");
+  if (themeToggle) themeToggle.textContent = "☀️";
+}
+
+// 切り替え
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeToggle.textContent = isDark ? "☀️" : "🌙";
+  });
+}

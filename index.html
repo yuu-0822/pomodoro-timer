@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-    <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>Pomodoro Timer</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="container">
-            <h1 id="mode">作業</h1>
-            <div id="time">25:00</div>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro Timer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <button id="themeToggle">🌙</button>
 
-            <div class="buttons">
-                <button id="start">開始</button>
-                <button id="pause">停止</button>
-                <button id="reset">リセット</button>
-            </div>
-        </div>
+    <h1 id="mode">作業</h1>
+    <div id="time">25:00</div>
 
-        <audio id="alarm" src="alarm.mp3"></audio>
-        <script src="script.js"></script>
-    </body>
+    <div class="buttons">
+      <button id="start">開始</button>
+      <button id="pause">停止</button>
+      <button id="reset">リセット</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
